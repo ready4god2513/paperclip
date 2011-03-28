@@ -12,8 +12,7 @@ module Paperclip
         end unless defined?(Akamaized::Connection)
 
         base.instance_eval do
-          @akamaized = Akamaized.new(parse_credentials(@options[:akamai]))
-          @akamaized::Connection.new
+          @akamaized = Akamaized::Connection.new(parse_credentials(@options[:akamai_credentials]))
         end
       end
 
