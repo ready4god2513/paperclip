@@ -22,7 +22,7 @@ module Paperclip
       end
 
       def exists?(style = default_style)
-        original_filename ? @akamaized::Connection.exists?(path(style)) : false
+        original_filename ? @akamaized.exists?(path(style)) : false
       end
 
       # Returns representation of the data of the file assigned to the given
@@ -34,7 +34,7 @@ module Paperclip
         @queued_for_write.each do |style, file|
           begin
             log("saving #{path(style)}")
-            @akamaized::Connection.put(nil, file)
+            @akamaized.put(nil, file)
           rescue Exception => e
             raise
           end
@@ -47,7 +47,7 @@ module Paperclip
           
           begin
             log("deleting #{path}")
-            @akamaized::Connection.delete!(path)
+            @akamaized.delete!(path)
           rescue Exception => e
             raise
           end
