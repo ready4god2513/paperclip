@@ -12,7 +12,12 @@ module Paperclip
         end unless defined?(Akamaized::Connection)
 
         base.instance_eval do
-          @akamaized = Akamaized::Connection.new(parse_credentials(@options[:akamai_credentials]))
+          @akamai_options = parse_credentials(@options[:akamai_credentials])
+          @akamaized = Akamaized::Connection.new(@akamai_options)
+        end
+        
+        Paperclip.interpolates(:akamai_url) do |attachment, style|
+          "http://#{@akamai_options[:public_url]}/#{attachment.path(style).gsub(%r{^/}, "")}"
         end
       end
 
@@ -34,7 +39,7 @@ module Paperclip
         @queued_for_write.each do |style, file|
           begin
             log("saving #{path(style)}")
-            @akamaized.put(nil, file)
+            @akamaized.put(file)
           rescue Exception => e
             raise
           end
